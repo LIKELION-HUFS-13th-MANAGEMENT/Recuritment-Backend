@@ -67,3 +67,17 @@ class UserLoginSerializer(serializers.Serializer):
                 "password": user.password,  
             }
         }
+    
+class UserInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            "id",
+            "email",
+            "fullname",
+            "student_number",
+            "grade",
+            "phone",
+            "major_1",
+            "major_2",
+        )

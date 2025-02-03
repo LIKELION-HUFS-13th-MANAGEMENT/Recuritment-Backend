@@ -1,7 +1,7 @@
 from rest_framework import status, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import UserRegisterSerializer, UserLoginSerializer
+from .serializers import UserRegisterSerializer, UserLoginSerializer, UserInfoSerializer
 from rest_framework_simplejwt.tokens import AccessToken, BlacklistMixin
 
 class SignUpView(APIView):
@@ -24,3 +24,11 @@ class LogoutView(APIView):
 
     def post(self, request):
         return Response({"message": "Successfully logged out."}, status=status.HTTP_200_OK)
+    
+class UserInfoView(APIView):
+    permission_classes = [permissions.IsAuthenticated] 
+
+    def get(self, request):
+        user = request.user
+        serializer = UserInfoSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
