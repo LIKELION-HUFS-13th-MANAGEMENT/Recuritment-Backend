@@ -43,3 +43,27 @@ class UserRegisterSerializer(serializers.ModelSerializer):
             }
         }
 
+class UserLoginSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField(write_only=True)
+
+    def validate(self, data):
+        email = data.get("email")
+        password = data.get("password")
+
+        user = authenticate(email=email, password=password)
+
+        if not user:
+            raise serializers.ValidationError({"error": "Invalid email or password"})
+
+        refresh = RefreshToken.for_user(user)
+
+        return {
+            "access": str(refresh.access_token),
+            "refresh": str(refresh),
+            "user": {
+                "id": user.id,
+                "email": user.email,
+                "password": user.password,  
+            }
+        }

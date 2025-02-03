@@ -22,4 +22,3 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('member/', include('member.urls')),
 ]
-
