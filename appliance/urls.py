@@ -5,4 +5,5 @@ urlpatterns = [
     path("apply/", ApplyAPIView.as_view()),
     path("edit/<int:pk>/", ApplicationEditAPIView.as_view()),
     path("list/", ApplicationListAPIView.as_view()),
+    path("submit/<int:pk>/", ApplicationSubmitAPIView.as_view()),
 ]
