@@ -6,14 +6,22 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 from .serializers import *
 from .permissions import IsOwnerOrReadOnly, IsSuperUserOnly
+from django.utils import timezone
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 # Create your views here.
+DEADLINE = datetime(2025, 2, 23, 23, 59, 59, tzinfo=ZoneInfo('Asia/Seoul'))
+
 class ApplyAPIView(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     def post(self, request):
+        current_time = timezone.now()
+        if current_time > DEADLINE:
+            return Response({"error": "제출 기한이 지났습니다."}, status=status.HTTP_403_FORBIDDEN)
         if Application.objects.filter(user=request.user).exists():
-            return Response({"error": "이미 신청서를 작성하셨습니다."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "이미 신청서를 작성했습니다."}, status=status.HTTP_400_BAD_REQUEST)
         serializer = ApplySerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save(user=request.user)
@@ -34,6 +42,9 @@ class ApplicationEditAPIView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def put(self, request, pk):
+        current_time = timezone.now()
+        if current_time > DEADLINE:
+            return Response({"error": "제출 기한이 지났습니다."}, status=status.HTTP_403_FORBIDDEN)
         application = self.get_object(pk)
         serializer = ApplicationSerializer(application, data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
