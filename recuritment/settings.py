@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['woodzverse.pythonanywhere.com', '127.0.0.1', 'localhost']
 
@@ -62,6 +62,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'recuritment.urls'
@@ -148,13 +149,16 @@ SIMPLE_JWT = {
     "TOKEN_BLACKLIST_ENABLED": True,
 }
 
-#CORS
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',  # 로컬 개발 환경,
+    'http://localhost:8000',
+    "http://localhost:5173",
+    'https://woodzverse.pythonanywhere.com',  # 배포 환경
+]
+
 
 CORS_ORIGIN_ALLOW_ALL = False
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    #"https://",    # 프로덕션 서버
-]
+
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
     #"https://",
@@ -181,6 +185,8 @@ CORS_ALLOW_HEADERS = (
     'user-agent',
     'x-csrftoken',
     'x-requested-with',
+     'content-type',
+    'Access-Control-Allow-Origin',
 )
 
 APPEND_SLASH = False
