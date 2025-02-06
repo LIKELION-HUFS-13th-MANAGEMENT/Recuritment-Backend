@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'appliance',
     'rest_framework',
     'rest_framework_simplejwt',
-    'rest_framework_simplejwt.token_blacklist',	
+    'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
 ]
 
@@ -54,6 +54,7 @@ REST_FRAMEWORK = {
 }
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -151,12 +152,42 @@ SIMPLE_JWT = {
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',  # 로컬 개발 환경,
     'http://localhost:8000',
+    "http://localhost:5173",
     'https://woodzverse.pythonanywhere.com',  # 배포 환경
 ]
 
-CORS_ALLOW_HEADERS = [
-    'content-type',
-    'authorization',
-    'Access-Control-Allow-Origin',
+
+CORS_ORIGIN_ALLOW_ALL = False
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+    #"https://",
 ]
 
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_METHODS = (
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+)
+
+CORS_ALLOW_HEADERS = (
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+     'content-type',
+    'Access-Control-Allow-Origin',
+)
+
+APPEND_SLASH = False
+CORS_PREFLIGHT_MAX_AGE = 86400
