@@ -8,7 +8,13 @@ from .serializers import *
 from .permissions import IsOwnerOrReadOnly, IsSuperUserOnly
 from django.utils import timezone
 from datetime import datetime
-from zoneinfo import ZoneInfo
+
+import sys
+
+if sys.version_info < (3, 9):  
+    from backports.zoneinfo import ZoneInfo
+else:
+    from zoneinfo import ZoneInfo
 
 # Create your views here.
 DEADLINE = datetime(2025, 2, 23, 23, 59, 59, tzinfo=ZoneInfo('Asia/Seoul'))
