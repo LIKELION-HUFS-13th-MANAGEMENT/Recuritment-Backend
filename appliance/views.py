@@ -8,6 +8,7 @@ from .serializers import *
 from .permissions import IsOwnerOrReadOnly, IsSuperUserOnly
 from django.utils import timezone
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 import sys
 
@@ -17,13 +18,13 @@ else:
     from zoneinfo import ZoneInfo
 
 # Create your views here.
-DEADLINE = datetime(2025, 2, 23, 23, 59, 59, tzinfo=ZoneInfo('Asia/Seoul'))
+DEADLINE = timezone.make_aware(datetime(2025, 2, 23, 23, 59, 59), timezone=ZoneInfo('Asia/Seoul'))
 
 class ApplyAPIView(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     def post(self, request):
-        current_time = timezone.now()
+        current_time = timezone.now().astimezone(ZoneInfo("Asia/Seoul"))
         if current_time > DEADLINE:
             return Response({"error": "제출 기한이 지났습니다."}, status=status.HTTP_403_FORBIDDEN)
         if Application.objects.filter(user=request.user).exists():
@@ -48,7 +49,7 @@ class ApplicationEditAPIView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def put(self, request, pk):
-        current_time = timezone.now()
+        current_time = timezone.now().astimezone(ZoneInfo("Asia/Seoul"))
         if current_time > DEADLINE:
             return Response({"error": "제출 기한이 지났습니다."}, status=status.HTTP_403_FORBIDDEN)
         application = self.get_object(pk)
@@ -76,8 +77,7 @@ class ApplicationListAPIView(APIView):
     permission_classes = [IsSuperUserOnly]
     def get(self, request):
         try:
-            user = request.user
-            applications = Application.objects.filter(user=user.id)
+            applications = Application.objects.all()
             serializer = ApplicationlistSerializer(applications, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except:
