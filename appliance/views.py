@@ -6,7 +6,8 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 from .serializers import *
 from .permissions import IsOwnerOrReadOnly, IsSuperUserOnly
-from django.utils.timezone import make_aware
+# from django.utils.timezone import make_aware
+from django.utils import timezone
 from datetime import datetime
 
 try:
@@ -15,7 +16,7 @@ except ImportError:
     from backports.zoneinfo import ZoneInfo  
 
 # Create your views here.
-DEADLINE = make_aware(datetime(2025, 2, 23, 23, 59, 59), timezone=ZoneInfo("Asia/Seoul"))
+DEADLINE = timezone.make_aware(datetime(2025, 2, 23, 23, 59, 59), timezone=ZoneInfo('Asia/Seoul'))
 
 class ApplyAPIView(APIView):
     authentication_classes = [JWTAuthentication]

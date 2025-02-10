@@ -152,6 +152,7 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',  # 로컬 개발 환경,
     'http://localhost:8000',
     'https://woodzverse.pythonanywhere.com',  # 배포 환경
+    'https://www.likelion-hufs.store',
 ]
 
 CORS_ALLOW_HEADERS = [
