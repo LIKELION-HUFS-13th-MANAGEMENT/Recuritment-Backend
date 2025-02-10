@@ -154,6 +154,7 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:8000',
     "http://localhost:5173",
     'https://woodzverse.pythonanywhere.com',  # 배포 환경
+    'https://www.likelion-hufs.store',
 ]
 
 
