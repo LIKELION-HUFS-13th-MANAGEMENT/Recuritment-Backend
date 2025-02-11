@@ -48,3 +48,14 @@ class UserInfoView(APIView):
         user = request.user
         serializer = UserInfoSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+
+class UserStateView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        if user.is_superuser:
+            return Response({'message': 'user is a superuser.'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message': 'user is not a superuser.'}, status=status.HTTP_200_OK)
