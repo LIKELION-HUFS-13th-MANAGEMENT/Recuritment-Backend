@@ -10,6 +10,7 @@ class ApplicationSerializer(serializers.ModelSerializer):
         return obj.created_at.strftime('%Y-%m-%d')
     
 class ApplySerializer(serializers.ModelSerializer):
+    answer4 = serializers.CharField(required=False) 
     class Meta:
         model = Application
         fields = ['id', 'track', 'answer1', 'answer2', 'answer3', 'answer4', 'answer5', 'canSpendTime', 'portfolio']
