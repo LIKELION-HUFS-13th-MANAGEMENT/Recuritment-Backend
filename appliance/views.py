@@ -36,21 +36,22 @@ class ApplyAPIView(APIView):
 class ApplicationEditAPIView(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsOwnerOrReadOnly]
-    def get_object(self, pk):
-        application = get_object_or_404(Application, pk=pk)
+    def get_object(self):
+        user = self.request.user
+        application = get_object_or_404(Application, user=user)
         self.check_object_permissions(self.request, application)
         return application
 
-    def get(self, request, pk):
-        application = self.get_object(pk)
+    def get(self, request):
+        application = self.get_object()
         serializer = ApplicationSerializer(application)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def put(self, request, pk):
+    def put(self, request):
         current_time = timezone.now().astimezone(ZoneInfo("Asia/Seoul"))
         if current_time > DEADLINE:
             return Response({"error": "제출 기한이 지났습니다."}, status=status.HTTP_403_FORBIDDEN)
-        application = self.get_object(pk)
+        application = self.get_object()
         serializer = ApplicationSerializer(application, data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
