@@ -3,8 +3,8 @@ from .models import Application
 
 class ApplicationSerializer(serializers.ModelSerializer):
     created_at = serializers.SerializerMethodField()
-    answer4 = serializers.CharField(required=False)
-    portfolio = serializers.CharField(required=False) 
+    answer4 = serializers.CharField(allow_blank=True, required=False)
+    portfolio = serializers.CharField(allow_blank=True, required=False) 
     class Meta:
         model = Application
         fields = "__all__"
@@ -12,8 +12,8 @@ class ApplicationSerializer(serializers.ModelSerializer):
         return obj.created_at.strftime('%Y-%m-%d')
     
 class ApplySerializer(serializers.ModelSerializer):
-    answer4 = serializers.CharField(required=False) 
-    portfolio = serializers.CharField(required=False)
+    answer4 = serializers.CharField(allow_blank=True, required=False) 
+    portfolio = serializers.CharField(allow_blank=True, required=False)
     class Meta:
         model = Application
         fields = ['id', 'track', 'answer1', 'answer2', 'answer3', 'answer4', 'answer5', 'canSpendTime', 'portfolio']
