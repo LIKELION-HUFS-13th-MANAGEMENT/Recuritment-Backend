@@ -60,7 +60,7 @@ class ApplicationEditAPIView(APIView):
     
 class ApplicationSubmitAPIView(APIView):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsSuperUserOnly]
     def get_object(self, pk):
         application = get_object_or_404(Application, pk=pk)
         self.check_object_permissions(self.request, application)
@@ -68,7 +68,7 @@ class ApplicationSubmitAPIView(APIView):
 
     def get(self, request, pk):
         application = self.get_object(pk)
-        serializer = ApplicationSerializer(application)
+        serializer = ApplicationDetailSerializer(application)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
 class ApplicationListAPIView(APIView):
