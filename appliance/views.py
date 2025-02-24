@@ -16,7 +16,7 @@ except ImportError:
     from backports.zoneinfo import ZoneInfo  
 
 # Create your views here.
-DEADLINE = timezone.make_aware(datetime(2025, 2, 23, 23, 59, 59), timezone=ZoneInfo('Asia/Seoul'))
+DEADLINE = timezone.make_aware(datetime(2025, 2, 26, 18, 59, 59), timezone=ZoneInfo('Asia/Seoul'))
 
 class ApplyAPIView(APIView):
     authentication_classes = [JWTAuthentication]
